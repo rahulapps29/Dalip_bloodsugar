@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta desc="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- favicon -->
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <!-- font awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
+    <!-- normalize css -->
+    <link rel="stylesheet" href="./normalize.css" />
+    <!-- main css -->
+    <link rel="stylesheet" href="./main.css" />
+    <title>Medicine Sheet</title>
+  </head>
+  <body>
+    <a href="average.html" class="top-right-buttontwo"
+    >Average</a
+  >
+    <a href="https://report.trackwellness.in" class="top-right-button"
+      >Report</a
+    >
+    <!-- Form comes first -->
+    <form class="task-form">
+      <h4>Medicine Sheet</h4>
+      <div class="form-control">
+        <select name="person" class="task-name">
+          <option value="dalip">Dalip</option>
+        </select>
+        <!-- <input type="text" name="name" class="task-name" placeholder="Name" /> -->
+      </div>
+      <div class="form-control">
+        <input
+          type="text"
+          name="meal"
+          class="task-meal"
+          placeholder="Meal: Dal/Fish"
+        />
+      </div>
+      <div class="form-control">
+        <input
+          type="datetime-local"
+          id="date"
+          name="date"
+          class="task-edit-dateTime"
+        />
+      </div>
+      <div class="form-control" id="task-optionsdiv">
+        <select id="task-options" name="person" class="task-options">
+          <option value="before">Before</option>
+          <option value="after">After</option>
+        </select>
+        <select name="person" class="task-comment">
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+        </select>
+        <!-- <input
+          type="text"
+          name="comment"
+          class="task-comment"
+          placeholder="Breakfast/Lunch/Dinner"
+        /> -->
+      </div>
+      <div class="form-control">
+        <input
+          type="number"
+          name="sugar"
+          class="task-sugar"
+          placeholder="Sugar in mg/dL"
+        />
+      </div>
+      <div class="form-control">
+        <input
+          type="number"
+          name="insulin"
+          class="task-insulin"
+          placeholder="Insulin in units (.01 mL)"
+        />
+      </div>
+      <div class="form-control">
+        <input
+          type="number"
+          name="lantus"
+          class="task-lantus"
+          placeholder="Lantus in units (.01 mL)"
+        />
+      </div>
+      <div class="form-control">
+        <button type="submit" class="btn submit-btn">Submit</button>
+      </div>
+      <div class="form-alert"></div>
+    </form>
+
+    <!-- List of tasks comes after the form -->
+    <section class="tasks-container">
+      <p class="loading-text">Loading...</p>
+      <div class="tasks"></div>
+    </section>
+
+    <!-- axios -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="./browser-app.js"></script>
+  </body>
+</html>

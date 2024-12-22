@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugar Level Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+
+       .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .slicers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .topheading {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1px;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .slicer {
+            flex: 1 1 calc(30% - 10px);
+            min-width: 150px;
+            padding: 15px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            background-color: #e9f7fe;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .slicer label {
+            display: block;
+            margin-bottom: 5px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .chart {
+            width: 100%;
+            height: 300px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .slicer {
+                flex: 1 1 calc(45% - 10px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slicer {
+                flex: 1 1 100%;
+            }
+        }
+    
+
+        .top-right-buttontwo {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: .5rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.top-right-buttontwo:hover {
+  background-color: #45a049;
+}
+
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <a href="index.html" class="top-right-buttontwo"
+        >Trackwellness</a
+      >
+        <div class="topheading">
+        <h3>Monthly Average</h3>
+        </div>
+        <!-- Slicers Section -->
+        <div class="slicers">
+            <div class="slicer">
+                <label for="monthFilter">Select Month:</label>
+                <select id="monthFilter" onchange="updateCharts()">
+                    <option value="all">All</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+            <div class="slicer">
+                <label for="yearFilter">Select Year:</label>
+                <select id="yearFilter" onchange="updateCharts()">
+                    <option value="all">All</option>
+                    <option value="2024">2024</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts">
+            <div class="chart">
+                <canvas id="avgSugarChart"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="minMaxSugarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let rawData = [];
+
+        // Fetch data from API
+        async function fetchData() {
+            const response = await fetch('https://trackwellness.in/api/tasks/d');
+            rawData = await response.json();
+            updateCharts();
+        }
+
+        // Update charts based on filters
+        function updateCharts() {
+            const monthFilter = document.getElementById('monthFilter').value;
+            const yearFilter = document.getElementById('yearFilter').value;
+
+            // Filter data
+            const filteredData = rawData.tasks.filter(item => {
+                const date = new Date(item.tDate);
+                const monthMatches = monthFilter === 'all' || date.getMonth() + 1 === parseInt(monthFilter);
+                const yearMatches = yearFilter === 'all' || date.getFullYear() === parseInt(yearFilter);
+                return monthMatches && yearMatches;
+            });
+
+            // Calculate stats
+            const sugarLevels = filteredData.map(item => item.sugar);
+            const avgSugar = sugarLevels.reduce((sum, val) => sum + val, 0) / sugarLevels.length || 0;
+            const maxSugar = Math.max(...sugarLevels) || 0;
+            const minSugar = Math.min(...sugarLevels) || 0;
+
+            // Update charts
+            avgSugarChart.data.datasets[0].data = [avgSugar];
+            avgSugarChart.update();
+
+            minMaxSugarChart.data.datasets[0].data = [minSugar, maxSugar];
+            minMaxSugarChart.update();
+        }
+
+        // Initialize charts
+        const avgSugarChart = new Chart(document.getElementById('avgSugarChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Average Sugar'],
+                datasets: [{
+                    label: 'Average Sugar Level',
+                    data: [0],
+                    backgroundColor: '#4caf50',
+                    borderColor: '#388e3c',
+                    borderWidth: 1,
+                }],
+            },
+        });
+
+        const minMaxSugarChart = new Chart(document.getElementById('minMaxSugarChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Min Sugar', 'Max Sugar'],
+                datasets: [{
+                    label: 'Min and Max Sugar Levels',
+                    data: [0, 0],
+                    backgroundColor: ['#ff6384', '#36a2eb'],
+                    borderColor: ['#ff6384', '#36a2eb'],
+                    borderWidth: 1,
+                }],
+            },
+        });
+
+        // Fetch initial data
+        fetchData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Search Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f3f4f6;
+        color: #333;
+      }
+
+      .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .search-bar {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .search-bar input {
+        width: 50%;
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+      }
+
+      .image-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+      }
+
+      .image-card {
+        flex: 1 1 calc(30% - 10px);
+        min-width: 200px;
+        padding: 15px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        background-color: #e9f7fe;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .image-card img {
+        max-width: 100%;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+
+      .download-btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 15px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      @media (max-width: 768px) {
+        .image-card {
+          flex: 1 1 calc(45% - 10px);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .image-card {
+          flex: 1 1 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <h1>Image Search</h1>
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchBox"
+          placeholder="Search for images..."
+          oninput="fetchImages()"
+        />
+      </div>
+      <div class="image-list" id="imageList">
+        Start typing to search for images...
+      </div>
+    </div>
+
+    <script>
+      async function fetchImages() {
+        const query = document.getElementById("searchBox").value;
+        if (!query) {
+          document.getElementById("imageList").innerHTML =
+            "Start typing to search for images...";
+          return;
+        }
+
+        const apiKey = "47797640-ee5cd5520768675d8741493ec"; // Replace with your Pixabay API key
+        const apiUrl = `https://pixabay.com/api/?key=${apiKey}&q=${encodeURIComponent(query)}&image_type=photo&pretty=true`;
+
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        displayImages(data.hits);
+      }
+
+      function displayImages(images) {
+        const imageListContainer = document.getElementById("imageList");
+        imageListContainer.innerHTML = "";
+
+        images.forEach((image) => {
+          const imageCard = document.createElement("div");
+          imageCard.classList.add("image-card");
+
+          imageCard.innerHTML = `
+                    <img src="${image.webformatURL}" alt="${image.tags}">
+                    <p>${image.tags}</p>
+                    <a href="${image.largeImageURL}" download="image.jpg" class="download-btn">Download</a>
+                `;
+
+          imageListContainer.appendChild(imageCard);
+        });
+      }
+    </script>
+  </body>
+</html>

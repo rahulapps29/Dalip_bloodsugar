@@ -326,7 +326,6 @@ body > div > form > a {
   color: #999;
 }
 
-
 .top-right-button {
   position: fixed;
   top: 10px;
@@ -345,8 +344,6 @@ body > div > form > a {
 .top-right-button:hover {
   background-color: #45a049;
 }
-
-
 
 .top-right-buttontwo {
   position: fixed;

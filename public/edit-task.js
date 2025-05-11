@@ -33,7 +33,7 @@ const showTask = async () => {
 
     const tDateTime = new Date(tDate);
     const localISOTime = new Date(
-      tDateTime.getTime() - tDateTime.getTimezoneOffset() * 60000
+      tDateTime.getTime() - tDateTime.getTimezoneOffset() * 60000,
     )
       .toISOString()
       .slice(0, 16);

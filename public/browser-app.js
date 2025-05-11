@@ -49,10 +49,10 @@ const showTasks = async () => {
         return `<div class="single-task">
 <h5><span><i class="far fa-check-circle"></i></span>
      ${tDate.substring(0, 10)}  ${new Date(tDate).toLocaleString("en-US", {
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
-        })}: ${name} : ${meal} : ${comment} : sugar ${sugar} mg/dl : insulin ${insulin} units (.01 ml) : Lantus ${lantus} units (.01 ml)</h5>
+       hour: "numeric",
+       minute: "numeric",
+       hour12: true,
+     })}: ${name} : ${meal} : ${comment} : sugar ${sugar} mg/dl : insulin ${insulin} units (.01 ml) : Lantus ${lantus} units (.01 ml)</h5>
 <div class="task-links">
 <!-- edit link -->
 <a href="task.html?id=${taskID}"  class="edit-link">
@@ -85,7 +85,7 @@ tasksDOM.addEventListener("click", async (e) => {
     const id = el.parentElement.dataset.id;
     try {
       const userConfirmed = confirm(
-        "Are you sure you want to delete this transaction?"
+        "Are you sure you want to delete this transaction?",
       );
       if (!userConfirmed) {
         // If the user cancels, prevent the delete action

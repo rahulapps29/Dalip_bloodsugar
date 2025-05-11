@@ -41,7 +41,7 @@ const updateTask = asyncWrapper(async (req, res, next) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   );
 
   if (!task) {

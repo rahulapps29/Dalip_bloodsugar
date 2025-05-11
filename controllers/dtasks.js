@@ -49,7 +49,7 @@ const getAlldynamicIn = async (req, res) => {
     const regEx = /\b(<|>|>=|=|<|<=)\b/g;
     let filters = numericFilters.replace(
       regEx,
-      (match) => `-${opeartorMap[match]}-`
+      (match) => `-${opeartorMap[match]}-`,
     );
 
     const options = ["sugar"];
